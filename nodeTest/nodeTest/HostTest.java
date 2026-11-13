@@ -25,7 +25,7 @@ class HostTest {
 		Port p1 = h1.getAvailablePort();
 		Port p2 = h2.getAvailablePort();
 		
-		assertDoesNotThrow(() -> new Link(p1, p2, Protocol.ETH));
+		assertDoesNotThrow(() -> new Link(p1, p2));
 	}
 	
 	@Test
@@ -42,8 +42,8 @@ class HostTest {
 		Port p2 = h2.getAvailablePort();
 		Port p3 = h3.getAvailablePort();
 		
-		Link l1 = new Link(p1, p2, Protocol.ETH);
-		assertThrows(AssertionError.class, () -> new Link(p1, p3, Protocol.ETH));
+		Link l1 = new Link(p1, p2);
+		assertThrows(AssertionError.class, () -> new Link(p1, p3));
 	}
 	
 	@Test
@@ -57,7 +57,7 @@ class HostTest {
 		Port p1 = h1.getAvailablePort();
 		Port p2 = h2.getAvailablePort();
 		
-		Link l1 = new Link(p1, p2, Protocol.ETH);
+		Link l1 = new Link(p1, p2);
 		
 		assertDoesNotThrow(() -> l1.remove());
 		assertEquals(p1, h1.getAvailablePort());
@@ -75,10 +75,10 @@ class HostTest {
 		Port p1 = h1.getAvailablePort();
 		Port p2 = h2.getAvailablePort();
 		
-		Link l1 = new Link(p1, p2, Protocol.ETH);
+		Link l1 = new Link(p1, p2);
 		
 		String body = "Test";
-		Header head = new Header(h1.mac(), h2.mac());
+		Header head = Header.of(h1.mac(), h2.mac());
 		Packet p = new Packet(head, body.getBytes());
 		
 		assertDoesNotThrow(() -> h1.sendPacket(p, p1));

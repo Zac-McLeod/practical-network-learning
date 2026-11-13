@@ -6,6 +6,7 @@ import common.IPAddr;
 import common.Port;
 import common.Link;
 import common.Packet;
+import common.Header;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -41,14 +42,21 @@ public class Host implements Node{
 		ports.put(p, null);
 	}
 	
-	public void sendPacket(Packet p, Port port) {
+	public void sendPacket(Packet packet, Port port) {
 		Link l = ports.get(port);
-		l.passPacket(p);
+		l.passPacket(packet, port);
 	}
 	
-	public void acceptPacket(Packet p, Port port) {
-		String body = new String(p.body());
-		System.out.println(this.nickname +": "+body);
+	public void acceptPacket(Packet packet, Port port) {
+		if (!packet.getClass().equals(ACKPacket.class)) {
+			sendAck(packet.head(), port);
+		}
+	}
+	
+	private void sendAck(Header head, Port port) {
+		Header ackHead = Header.of(head.dest(), head.src(), 1000);
+		Packet ACK = new ACKPacket(ackHead);
+		sendPacket(ACK, port);
 	}
 	
 	public Port getAvailablePort() {

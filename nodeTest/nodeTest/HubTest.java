@@ -27,7 +27,7 @@ class HubTest {
 		Port p1 = hub.getAvailablePort();
 		Port p2 = h1.getAvailablePort();
 		
-		assertDoesNotThrow(() -> new Link(p1, p2, Protocol.ETH));
+		assertDoesNotThrow(() -> new Link(p1, p2));
 	}
 	
 	@Test
@@ -44,11 +44,11 @@ class HubTest {
 		Port p1 = h1.getAvailablePort();
 		Port p2 = h2.getAvailablePort();
 		
-		assertDoesNotThrow(() -> new Link(hub1, p1, Protocol.ETH));
+		assertDoesNotThrow(() -> new Link(hub1, p1));
 		
 		Port hub2 = hub.getAvailablePort();
 		assertNotEquals(hub1, hub2);
-		assertDoesNotThrow(() -> new Link(hub2, p2, Protocol.ETH));
+		assertDoesNotThrow(() -> new Link(hub2, p2));
 	}
 	
 	@Test
@@ -68,16 +68,16 @@ class HubTest {
 		Port p2 = h2.getAvailablePort();
 		Port p3 = h3.getAvailablePort();
 		
-		assertDoesNotThrow(() -> new Link(hub1, p1, Protocol.ETH));
+		assertDoesNotThrow(() -> new Link(hub1, p1));
 		
 		Port hub2 = hub.getAvailablePort();
-		assertDoesNotThrow(() -> new Link(hub2, p2, Protocol.ETH));
+		assertDoesNotThrow(() -> new Link(hub2, p2));
 		
 		Port hub3 = hub.getAvailablePort();
-		assertDoesNotThrow(() -> new Link(hub3, p3, Protocol.ETH));
+		assertDoesNotThrow(() -> new Link(hub3, p3));
 		
 		String body = "Test";
-		Header head = new Header(h1.mac(), h3.mac());
+		Header head = Header.of(h1.mac(), h3.mac());
 		Packet p = new Packet(head, body.getBytes());
 		
 		assertDoesNotThrow(() -> h1.sendPacket(p, p1));

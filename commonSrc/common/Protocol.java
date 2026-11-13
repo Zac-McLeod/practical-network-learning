@@ -1,5 +1,5 @@
 package common;
 
 public enum Protocol {
-	IP, ETH, WiFi, BT;
+	IPv4, IPv6, ETH, WiFi, BT;
 }

@@ -56,21 +56,17 @@ public class Hub implements Node{
 				.orElseThrow(NullPointerException::new);
 	}
 	
-	public void sendPacket(Packet p, Port port) {
+	public void sendPacket(Packet packet, Port port) {
 		Link l = ports.get(port);
-		l.passPacket(p);
+		l.passPacket(packet, port);
 	}
 	
-	public void acceptPacket(Packet p, Port port) {
-		
-		Header newHead = new Header(this.mac, p.head().dest());
-		Packet newP = new Packet(newHead, p.body());
-		
+	public void acceptPacket(Packet packet, Port port) {
 		ports.keySet().stream()
-			.filter(e -> !e.isAvailable() && e != port)
-			.forEach(e -> {
-				this.sendPacket(newP, e);
-			});
+		.filter(e -> !e.isAvailable() && e != port)
+		.forEach(e -> {
+			this.sendPacket(packet, e);
+		});
 	}
 	
 	public MACAddr mac() { return this.mac; }

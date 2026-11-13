@@ -1,9 +1,8 @@
 package common;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-public class MACAddr {
+public class MACAddr{
 	private final String addrString;
 	
 	public MACAddr() {

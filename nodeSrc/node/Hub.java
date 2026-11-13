@@ -2,15 +2,16 @@ package node;
 
 import common.Node;
 import common.MACAddr;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.IntStream;
-
 import common.IPAddr;
 import common.Port;
 import common.Link;
 import common.Packet;
+import common.Header;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 public class Hub implements Node{
 	private final String nickname;
@@ -37,7 +38,6 @@ public class Hub implements Node{
 		assert p.isAvailable() : "Specified port was unavailable";
 		
 		ports.put(p, l);
-		System.out.println(ports);
 	}
 	
 	public void free(Port p) {
@@ -51,12 +51,30 @@ public class Hub implements Node{
 	public Port getAvailablePort() {
 		return ports.keySet().stream()
 				.filter(p -> p.isAvailable())
+				.sorted(Comparator.comparing(Port::portNum))
 				.findFirst()
 				.orElseThrow(NullPointerException::new);
 	}
 	
-	public MACAddr mac() { return this.mac(); }
-	public IPAddr ip() { return this.ip(); }
+	public void sendPacket(Packet p, Port port) {
+		Link l = ports.get(port);
+		l.passPacket(p);
+	}
+	
+	public void acceptPacket(Packet p, Port port) {
+		
+		Header newHead = new Header(this.mac, p.head().dest());
+		Packet newP = new Packet(newHead, p.body());
+		
+		ports.keySet().stream()
+			.filter(e -> !e.isAvailable() && e != port)
+			.forEach(e -> {
+				this.sendPacket(newP, e);
+			});
+	}
+	
+	public MACAddr mac() { return this.mac; }
+	public IPAddr ip() { return this.ip; }
 	
 	public String toStr() { return this.nickname; }
 }

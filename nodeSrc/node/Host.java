@@ -5,6 +5,7 @@ import common.MACAddr;
 import common.IPAddr;
 import common.Port;
 import common.Link;
+import common.Packet;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -40,6 +41,16 @@ public class Host implements Node{
 		ports.put(p, null);
 	}
 	
+	public void sendPacket(Packet p, Port port) {
+		Link l = ports.get(port);
+		l.passPacket(p);
+	}
+	
+	public void acceptPacket(Packet p, Port port) {
+		String body = new String(p.body());
+		System.out.println(this.nickname +": "+body);
+	}
+	
 	public Port getAvailablePort() {
 		return ports.keySet().stream()
 				.filter(p -> p.isAvailable())
@@ -47,8 +58,8 @@ public class Host implements Node{
 				.orElseThrow(NullPointerException::new);
 	}
 	
-	public MACAddr mac() { return this.mac(); }
-	public IPAddr ip() { return this.ip(); }
+	public MACAddr mac() { return this.mac; }
+	public IPAddr ip() { return this.ip; }
 	
 	public String toStr() { return this.nickname; }
 }

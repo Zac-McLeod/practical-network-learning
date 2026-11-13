@@ -1,4 +1,4 @@
 package common;
-public class IPAddr {
+public class IPAddr{
 	
 }

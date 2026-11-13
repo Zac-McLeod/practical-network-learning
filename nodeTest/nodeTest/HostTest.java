@@ -39,10 +39,8 @@ class HostTest {
 		assertNotNull(h3);
 	
 		Port p1 = h1.getAvailablePort();
-		Port p2 = h2.getAvailablePort();
 		Port p3 = h3.getAvailablePort();
 		
-		Link l1 = new Link(p1, p2);
 		assertThrows(AssertionError.class, () -> new Link(p1, p3));
 	}
 	
@@ -73,9 +71,6 @@ class HostTest {
 		assertNotNull(h2);
 	
 		Port p1 = h1.getAvailablePort();
-		Port p2 = h2.getAvailablePort();
-		
-		Link l1 = new Link(p1, p2);
 		
 		String body = "Test";
 		Header head = Header.of(h1.mac(), h2.mac());
